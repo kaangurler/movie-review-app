@@ -30,7 +30,7 @@ public class Movie {
 
 	@ElementCollection
 	@CollectionTable(name = "movie_casts", joinColumns = @JoinColumn(name = "movie_id"))
-	private List<Long> casts;
+	private List<UUID> casts;
 	private Integer releaseYear;
 	private Integer duration;
 	@Lob

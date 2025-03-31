@@ -26,7 +26,7 @@ public class Rating {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
-	private Long userId;
+	private UUID userId;
 	private Integer value;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "movie_id", referencedColumnName = "id")
