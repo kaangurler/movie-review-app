@@ -47,7 +47,7 @@ public class MovieController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<MovieResponse> deleteById(@PathVariable UUID id) {
-		return ResponseEntity.ok(movieService.deleteById(id));
+	public void deleteById(@PathVariable UUID id) {
+		movieService.deleteById(id);
 	}
 }
