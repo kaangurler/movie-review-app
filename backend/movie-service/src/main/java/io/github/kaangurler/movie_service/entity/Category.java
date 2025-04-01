@@ -32,4 +32,8 @@ public enum Category {
 	public static List<Category> getAllTitles() {
 		return Arrays.stream(Category.values()).toList();
 	}
+
+	public static List<String> getTitles(List<Category> categories) {
+		return categories.stream().map(Category::getTitle).toList();
+	}
 }
