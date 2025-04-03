@@ -29,7 +29,7 @@ public class Rating {
 	private UUID userId;
 	private Integer value;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "movie_id", referencedColumnName = "id")
+	@JoinColumn(name = "movie_id", nullable = false)
 	@JsonIgnore
 	private Movie movie;
 }
