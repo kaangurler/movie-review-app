@@ -64,15 +64,32 @@ public class MovieService {
 				.orElseThrow(() -> new MovieNotFoundException("Movie ID = " + movieId + " has not found"));
 
 		Rating rating = RatingMapper.toEntity(ratingRequest);
+		rating.setMovie(movie);
 
 		List<Rating> ratings = ratingRepository.findAllByMovieId(movieId);
-		ratings.add(rating);
+
+		List<Rating> previousRatings = ratings.stream()
+				.filter(r -> r.getUserId().equals(ratingRequest.getUserId()))
+				.toList();
+
+		Rating dbRating;
+
+		if (previousRatings.isEmpty()) {
+
+			dbRating = ratingRepository.save(rating);
+			ratings.add(rating);
+		} else {
+
+			previousRatings.getFirst().setValue(rating.getValue());
+			dbRating = ratingRepository.save(previousRatings.getFirst());
+			ratings.get(ratings.indexOf(previousRatings.getFirst())).setValue(rating.getValue());
+		}
 
 		movie.setAverageRating(calculateAverageRating(ratings));
 
 		movieRepository.save(movie);
 
-		return RatingMapper.toResponse(rating);
+		return RatingMapper.toResponse(dbRating);
 	}
 
 	public List<RatingResponse> getAllRatingsByMovieId(UUID movieId) {
