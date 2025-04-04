@@ -27,11 +27,13 @@ public class MovieController {
 
 	@PostMapping()
 	public ResponseEntity<MovieResponse> create(@Valid @RequestBody MovieRequest movieRequest) {
+
 		return ResponseEntity.ok(movieService.create(movieRequest));
 	}
 
 	@GetMapping("{id}")
 	public ResponseEntity<MovieResponse> getById(@PathVariable UUID id) {
+
 		return ResponseEntity.ok(movieService.getById(id));
 	}
 
@@ -43,11 +45,13 @@ public class MovieController {
 	@PutMapping("{id}")
 	public ResponseEntity<MovieResponse> updateById(@PathVariable UUID id,
 			@Valid @RequestBody MovieRequest movieRequest) {
+
 		return ResponseEntity.ok(movieService.updateById(id, movieRequest));
 	}
 
 	@DeleteMapping("{id}")
 	public void deleteById(@PathVariable UUID id) {
+
 		movieService.deleteById(id);
 	}
 }
