@@ -10,7 +10,7 @@ public class RatingMapper {
 		return RatingResponse.builder()
 				.id(rating.getId())
 				.userId(rating.getUserId())
-				.movie(rating.getMovie())
+				.movieResponse(MovieMapper.toResponse(rating.getMovie()))
 				.value(rating.getValue())
 				.build();
 	}

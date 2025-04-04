@@ -11,6 +11,6 @@ import java.util.UUID;
 public class RatingResponse {
 	private UUID id;
 	private UUID userId;
-	private Movie movie;
+	private MovieResponse movieResponse;
 	private Integer value;
 }

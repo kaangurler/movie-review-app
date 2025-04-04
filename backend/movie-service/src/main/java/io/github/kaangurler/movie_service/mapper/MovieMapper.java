@@ -16,6 +16,7 @@ public class MovieMapper {
 				.releaseYear(movie.getReleaseYear())
 				.duration(movie.getDuration())
 				.storyline(movie.getStoryline())
+				.averageRating(movie.getAverageRating())
 				.image(movie.getImage())
 				.build();
 	}

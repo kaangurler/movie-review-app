@@ -16,6 +16,6 @@ public class MovieResponse {
 	private Integer releaseYear;
 	private Integer duration;
 	private String storyline;
-	private Double rating;
+	private Double averageRating;
 	private byte[] image;
 }

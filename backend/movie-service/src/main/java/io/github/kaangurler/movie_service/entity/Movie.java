@@ -33,6 +33,7 @@ public class Movie {
 	private List<UUID> casts;
 	private Integer releaseYear;
 	private Integer duration;
+	private double averageRating;
 	@Lob
 	@Column(columnDefinition = "TEXT")
 	private String storyline;
