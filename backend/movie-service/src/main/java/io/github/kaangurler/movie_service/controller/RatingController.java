@@ -2,13 +2,12 @@ package io.github.kaangurler.movie_service.controller;
 
 import io.github.kaangurler.movie_service.dto.RatingRequest;
 import io.github.kaangurler.movie_service.dto.RatingResponse;
-import io.github.kaangurler.movie_service.service.RatingService;
+import io.github.kaangurler.movie_service.service.MovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,24 +21,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RatingController {
 
-	private final RatingService ratingService;
+	private final MovieService movieService;
 
-	@PostMapping("{movieId}")
-	public ResponseEntity<RatingResponse> create(@PathVariable UUID movieId,
+	@PutMapping("{movieId}")
+	public ResponseEntity<RatingResponse> rateMovie(@PathVariable UUID movieId,
 			@Valid @RequestBody RatingRequest ratingRequest) {
 
-		return ResponseEntity.ok(ratingService.create(movieId, ratingRequest));
+		return ResponseEntity.ok(movieService.rateMovie(movieId, ratingRequest));
 	}
 
 	@GetMapping("movie/{movieId}")
-	public ResponseEntity<List<RatingResponse>> getAllByMovieId(@PathVariable UUID movieId) {
+	public ResponseEntity<List<RatingResponse>> getAllRatingsByMovieId(@PathVariable UUID movieId) {
 
-		return ResponseEntity.ok(ratingService.getAllByMovieId(movieId));
+		return ResponseEntity.ok(movieService.getAllRatingsByMovieId(movieId));
 	}
 
 	@GetMapping("user/{userId}")
-	public ResponseEntity<List<RatingResponse>> getAllByUserId(@PathVariable UUID userId) {
+	public ResponseEntity<List<RatingResponse>> getAllRatingsByUserId(@PathVariable UUID userId) {
 
-		return ResponseEntity.ok(ratingService.getAllByUserId(userId));
+		return ResponseEntity.ok(movieService.getAllRatingsByUserId(userId));
 	}
 }
