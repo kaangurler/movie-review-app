@@ -7,6 +7,8 @@ import io.github.kaangurler.movie_service.dto.RatingResponse;
 import io.github.kaangurler.movie_service.entity.Category;
 import io.github.kaangurler.movie_service.entity.Movie;
 import io.github.kaangurler.movie_service.entity.Rating;
+import io.github.kaangurler.movie_service.entity.SortDirection;
+import io.github.kaangurler.movie_service.entity.SortType;
 import io.github.kaangurler.movie_service.exception.custom.MovieNotFoundException;
 import io.github.kaangurler.movie_service.mapper.MovieMapper;
 import io.github.kaangurler.movie_service.mapper.RatingMapper;
@@ -14,8 +16,13 @@ import io.github.kaangurler.movie_service.repository.MovieRepository;
 import io.github.kaangurler.movie_service.repository.RatingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +44,7 @@ public class MovieService {
 				.toList());
 
 		Movie movie = MovieMapper.toEntity(movieRequest);
+		movie.setCreated(LocalDateTime.now());
 
 		Movie dbMovie = movieRepository.save(movie);
 
@@ -51,11 +59,17 @@ public class MovieService {
 		return MovieMapper.toResponse(movie);
 	}
 
-	public List<MovieResponse> getAll() {
+	public Page<MovieResponse> getAll(int page, int size, String sort, String direction) {
 
-		List<Movie> movies = movieRepository.findAll();
+		SortType sortType = SortType.getByName(sort);
 
-		return movies.parallelStream().map(MovieMapper::toResponse).toList();
+		Pageable pageable = SortDirection.getByName(direction) == SortDirection.DESC ?
+				PageRequest.of(--page, size, Sort.by(sortType.getNameLowerCase()).descending()) :
+				PageRequest.of(--page, size, Sort.by(sortType.getNameLowerCase()).ascending());
+
+		Page<Movie> movies = movieRepository.findAll(pageable);
+
+		return movies.map(MovieMapper::toResponse);
 	}
 
 	public RatingResponse rateMovie(UUID movieId, RatingRequest ratingRequest) {
