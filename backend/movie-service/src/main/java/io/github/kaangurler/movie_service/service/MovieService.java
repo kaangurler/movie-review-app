@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class MovieService {
 
 	private final MovieRepository movieRepository;
@@ -61,13 +63,7 @@ public class MovieService {
 
 	public Page<MovieResponse> getAll(int page, int size, String sort, String direction) {
 
-		SortType sortType = SortType.getByName(sort);
-
-		Pageable pageable = SortDirection.getByName(direction) == SortDirection.DESC ?
-				PageRequest.of(--page, size, Sort.by(sortType.getNameLowerCase()).descending()) :
-				PageRequest.of(--page, size, Sort.by(sortType.getNameLowerCase()).ascending());
-
-		Page<Movie> movies = movieRepository.findAll(pageable);
+		Page<Movie> movies = movieRepository.findAll(createPageableWithParams(page, size, sort, direction));
 
 		return movies.map(MovieMapper::toResponse);
 	}
@@ -146,5 +142,18 @@ public class MovieService {
 				.collect(Collectors.averagingDouble(Integer::doubleValue));
 
 		return averageRating;
+	}
+
+	private Pageable createPageableWithParams(int page, int size, String sort, String direction) {
+
+		SortType sortType = SortType.getByName(sort);
+
+		Pageable pageable = SortDirection.getByName(direction) == SortDirection.DESC
+				? PageRequest.of(--page,
+				size,
+				Sort.by(sortType.getNameLowerCase()).descending())
+				: PageRequest.of(--page, size, Sort.by(sortType.getNameLowerCase()).ascending());
+
+		return pageable;
 	}
 }
