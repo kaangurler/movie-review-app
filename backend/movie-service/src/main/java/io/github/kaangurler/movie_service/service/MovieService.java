@@ -61,9 +61,14 @@ public class MovieService {
 		return MovieMapper.toResponse(movie);
 	}
 
-	public Page<MovieResponse> getAll(int page, int size, String sort, String direction) {
+	public Page<MovieResponse> getAll(int page, int size, String sort, String direction, String categoryName) {
 
-		Page<Movie> movies = movieRepository.findAll(createPageableWithParams(page, size, sort, direction));
+		List<Category> categories = categoryName != null ?
+				List.of(Category.getByTitle(categoryName)) :
+				Category.getAllCategories();
+
+		Page<Movie> movies = movieRepository.findByCategoriesIn(categories,
+				createPageableWithParams(page, size, sort, direction));
 
 		return movies.map(MovieMapper::toResponse);
 	}
