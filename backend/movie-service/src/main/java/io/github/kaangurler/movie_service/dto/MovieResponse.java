@@ -3,6 +3,7 @@ package io.github.kaangurler.movie_service.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,4 +19,6 @@ public class MovieResponse {
 	private String storyline;
 	private Double averageRating;
 	private byte[] image;
+	private LocalDateTime created;
+	private LocalDateTime updated;
 }

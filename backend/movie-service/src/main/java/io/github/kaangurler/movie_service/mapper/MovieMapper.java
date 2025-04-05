@@ -5,6 +5,8 @@ import io.github.kaangurler.movie_service.dto.MovieResponse;
 import io.github.kaangurler.movie_service.entity.Category;
 import io.github.kaangurler.movie_service.entity.Movie;
 
+import java.time.LocalDateTime;
+
 public class MovieMapper {
 
 	public static MovieResponse toResponse(Movie movie) {
@@ -18,6 +20,8 @@ public class MovieMapper {
 				.storyline(movie.getStoryline())
 				.averageRating(movie.getAverageRating())
 				.image(movie.getImage())
+				.created(movie.getCreated())
+				.updated(movie.getUpdated())
 				.build();
 	}
 

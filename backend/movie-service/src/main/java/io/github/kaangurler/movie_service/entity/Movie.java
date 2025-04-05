@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,4 +39,6 @@ public class Movie {
 	@Column(columnDefinition = "TEXT")
 	private String storyline;
 	private byte[] image;
+	private LocalDateTime created;
+	private LocalDateTime updated;
 }
