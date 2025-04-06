@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -39,6 +40,12 @@ public class MovieController {
 	}
 
 	@GetMapping()
+	public ResponseEntity<List<MovieResponse>> getByIds(@RequestParam List<UUID> ids) {
+
+		return ResponseEntity.ok(movieService.getByIds(ids));
+	}
+
+	@GetMapping("all")
 	public ResponseEntity<Page<MovieResponse>> getAll(@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "title") String sort,

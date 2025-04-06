@@ -12,4 +12,5 @@ import java.util.UUID;
 public interface MovieRepository extends JpaRepository<Movie, UUID> {
 
 	Page<Movie> findByCategoriesIn(List<Category> categories, Pageable pageable);
+	List<Movie> findByIdIn(List<UUID> ids);
 }

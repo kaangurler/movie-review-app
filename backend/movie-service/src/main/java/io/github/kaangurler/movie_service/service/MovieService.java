@@ -61,6 +61,13 @@ public class MovieService {
 		return MovieMapper.toResponse(movie);
 	}
 
+	public List<MovieResponse> getByIds(List<UUID> ids) {
+
+		List<Movie> movies = movieRepository.findByIdIn(ids);
+
+		return movies.parallelStream().map(MovieMapper::toResponse).toList();
+	}
+
 	public Page<MovieResponse> getAll(int page, int size, String sort, String direction, String categoryName) {
 
 		List<Category> categories = categoryName != null ?
