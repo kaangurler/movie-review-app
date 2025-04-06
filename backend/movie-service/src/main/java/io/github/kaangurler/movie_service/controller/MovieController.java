@@ -40,9 +40,11 @@ public class MovieController {
 	}
 
 	@GetMapping()
-	public ResponseEntity<List<MovieResponse>> getByIds(@RequestParam List<UUID> ids) {
+	public ResponseEntity<List<MovieResponse>> getByIds(@RequestParam List<UUID> ids,
+			@RequestParam(defaultValue = "title") String sort,
+			@RequestParam(defaultValue = "asc") String direction) {
 
-		return ResponseEntity.ok(movieService.getByIds(ids));
+		return ResponseEntity.ok(movieService.getByIds(ids, sort, direction));
 	}
 
 	@GetMapping("all")

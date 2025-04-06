@@ -61,21 +61,21 @@ public class MovieService {
 		return MovieMapper.toResponse(movie);
 	}
 
-	public List<MovieResponse> getByIds(List<UUID> ids) {
+	public List<MovieResponse> getByIds(List<UUID> ids, String sortType, String direction) {
 
-		List<Movie> movies = movieRepository.findByIdIn(ids);
+		List<Movie> movies = movieRepository.findByIdIn(ids, getSort(sortType, direction));
 
 		return movies.parallelStream().map(MovieMapper::toResponse).toList();
 	}
 
-	public Page<MovieResponse> getAll(int page, int size, String sort, String direction, String categoryName) {
+	public Page<MovieResponse> getAll(int page, int size, String sortType, String direction, String categoryName) {
 
 		List<Category> categories = categoryName != null ?
 				List.of(Category.getByTitle(categoryName)) :
 				Category.getAllCategories();
 
 		Page<Movie> movies = movieRepository.findByCategoriesIn(categories,
-				createPageableWithParams(page, size, sort, direction));
+				PageRequest.of(--page, size, getSort(sortType, direction)));
 
 		return movies.map(MovieMapper::toResponse);
 	}
@@ -156,16 +156,12 @@ public class MovieService {
 		return averageRating;
 	}
 
-	private Pageable createPageableWithParams(int page, int size, String sort, String direction) {
+	private Sort getSort(String sortType, String direction) {
 
-		SortType sortType = SortType.getByName(sort);
+		SortDirection sortDirection = SortDirection.getByName(direction);
 
-		Pageable pageable = SortDirection.getByName(direction) == SortDirection.DESC
-				? PageRequest.of(--page,
-				size,
-				Sort.by(sortType.getNameLowerCase()).descending())
-				: PageRequest.of(--page, size, Sort.by(sortType.getNameLowerCase()).ascending());
+		String sort = SortType.getByName(sortType).getNameLowerCase();
 
-		return pageable;
+		return sortDirection != SortDirection.DESC ? Sort.by(sort).descending(): Sort.by(sort).ascending();
 	}
 }
